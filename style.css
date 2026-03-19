@@ -1,0 +1,514 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&display=swap');
+
+/* ============================================================
+   VARIABLES
+   ============================================================ */
+:root {
+    --card-w: 100px;
+    --card-h: 140px;
+    --card-gap: 12px;
+    --radius: 9px;
+
+    --felt-dark:  #0c4020;
+    --felt-mid:   #145a2b;
+    --felt-light: #1b7038;
+
+    --gold:       #ffd700;
+    --gold-glow:  rgba(255, 215, 0, 0.55);
+
+    --win-color:  #00e676;
+    --lose-color: #ff1744;
+
+    --card-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+    --font: 'Exo 2', sans-serif;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font);
+    background:
+        radial-gradient(ellipse at 50% 50%,
+            var(--felt-light) 0%,
+            var(--felt-mid)   45%,
+            var(--felt-dark)  100%);
+    min-height: 100vh;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* ============================================================
+   START SCREEN
+   ============================================================ */
+#start-screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(6px);
+}
+
+.start-content {
+    text-align: center;
+    color: #fff;
+    padding: 40px 50px;
+    background: linear-gradient(135deg,
+        rgba(255, 215, 0, 0.08),
+        rgba(0, 0, 0, 0.6));
+    border: 2px solid rgba(255, 215, 0, 0.25);
+    border-radius: 20px;
+    box-shadow: 0 0 70px rgba(255, 215, 0, 0.15);
+    max-width: 480px;
+    width: 90%;
+}
+
+.start-content h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--gold);
+    text-shadow: 0 0 30px var(--gold-glow);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 22px;
+}
+
+.rules {
+    list-style: none;
+    text-align: left;
+    margin: 0 auto 24px;
+}
+
+.rules li {
+    padding: 7px 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#start-btn {
+    padding: 13px 48px;
+    font-family: var(--font);
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: var(--gold);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+}
+
+#start-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
+}
+
+#start-btn:active {
+    transform: scale(0.97);
+}
+
+/* ============================================================
+   GAME AREA
+   ============================================================ */
+#game-area {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#game-area.hidden {
+    display: none;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+#header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    flex-shrink: 0;
+}
+
+.score-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 12px;
+    padding: 8px 28px;
+    min-width: 110px;
+}
+
+.panel-label {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 700;
+}
+
+.card-count {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1.1;
+}
+
+.panel-sublabel {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+#round-result {
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-align: center;
+    color: #fff;
+    min-width: 280px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+/* ============================================================
+   HAND AREAS
+   ============================================================ */
+.hand-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--card-gap);
+    padding: 8px 10px;
+    min-height: calc(var(--card-h) + 36px);
+    flex-shrink: 0;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* ============================================================
+   BATTLE AREA
+   ============================================================ */
+#battle-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.battle-slot {
+    width: var(--card-w);
+    height: var(--card-h);
+    border: 2px dashed rgba(255, 255, 255, 0.18);
+    border-radius: var(--radius);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s;
+}
+
+.slot-label {
+    position: absolute;
+    bottom: -22px;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.35);
+    pointer-events: none;
+}
+
+#vs-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vs-text {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--gold);
+    text-shadow: 0 0 25px var(--gold-glow);
+    letter-spacing: 4px;
+}
+
+/* ============================================================
+   STATUS BAR
+   ============================================================ */
+#status-bar {
+    flex-shrink: 0;
+    padding: 8px 10px 12px;
+    text-align: center;
+    min-height: 38px;
+}
+
+#status-msg {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ============================================================
+   CARD — BASE STRUCTURE
+   ============================================================ */
+.card {
+    width: var(--card-w);
+    height: var(--card-h);
+    perspective: 1000px;
+    cursor: default;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    /* All cards start face-down (back visible) */
+    transform: rotateY(180deg);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+/* The back of the card sits at 180deg so it shows when card-inner is rotateY(180deg) */
+.card-back {
+    transform: rotateY(180deg);
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ============================================================
+   PLAYER CARDS — hover to peek (3D flip)
+   ============================================================ */
+.player-card {
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+/* Lift card up on hover */
+.player-card.peekable:hover {
+    transform: translateY(-22px);
+    z-index: 10;
+}
+
+/* Flip card to show face on hover (overrides the rotateY(180deg) base) */
+.player-card.peekable:hover .card-inner {
+    transform: rotateY(0deg);
+}
+
+/* ============================================================
+   BATTLE SLOT CARD
+   ============================================================ */
+.battle-slot .card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ============================================================
+   DEAL ANIMATIONS (cards fly in from off-screen)
+   ============================================================ */
+@keyframes dealFromBottom {
+    from {
+        transform: translateY(220px) translateX(30px) rotate(20deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes dealFromTop {
+    from {
+        transform: translateY(-220px) translateX(-30px) rotate(-20deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.card.deal-player {
+    animation: dealFromBottom 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.card.deal-enemy {
+    animation: dealFromTop 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ============================================================
+   THROW ANIMATION (flying card overlay)
+   ============================================================ */
+.flying-card {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+    /* Transition: moves from hand to battle slot */
+    transition:
+        left   0.52s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        top    0.52s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        width  0.52s ease,
+        height 0.52s ease,
+        transform 0.52s ease;
+}
+
+/* ============================================================
+   REVEAL ANIMATION — BOOM!
+   The card was face-down (rotateY 180deg), this flips it open
+   ============================================================ */
+@keyframes revealBoom {
+    0%   { transform: rotateY(180deg) scale(0.85); }
+    45%  { transform: rotateY(10deg)  scale(1.18); }
+    65%  { transform: rotateY(-8deg)  scale(1.12); }
+    100% { transform: rotateY(0deg)   scale(1);    }
+}
+
+.card-inner.revealing {
+    animation: revealBoom 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* ============================================================
+   WIN / LOSE GLOW EFFECTS
+   ============================================================ */
+@keyframes winGlow {
+    0%,  100% { box-shadow: 0 0  0px transparent; }
+    50%        { box-shadow: 0 0 28px #00e676, 0 0 50px rgba(0,230,118,0.4); }
+}
+
+@keyframes loseGlow {
+    0%,  100% { box-shadow: 0 0  0px transparent; }
+    50%        { box-shadow: 0 0 28px #ff1744, 0 0 50px rgba(255,23,68,0.4); }
+}
+
+.card.winner-glow .card-front {
+    animation: winGlow 0.45s ease 3;
+}
+
+.card.loser-glow .card-front {
+    animation: loseGlow 0.45s ease 3;
+}
+
+/* ============================================================
+   GAME OVER SCREEN
+   ============================================================ */
+#gameover-screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(7px);
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.gameover-content {
+    text-align: center;
+    color: #fff;
+    padding: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-radius: 20px;
+}
+
+.gameover-content h2 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+}
+
+.gameover-content p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 32px;
+}
+
+#restart-btn {
+    padding: 13px 44px;
+    font-family: var(--font);
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: var(--gold);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+}
+
+#restart-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(255, 215, 0, 0.6);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 600px) {
+    :root {
+        --card-w: 72px;
+        --card-h: 101px;
+        --card-gap: 8px;
+    }
+
+    .start-content h1 { font-size: 1.6rem; }
+    #round-result { font-size: 1rem; min-width: 180px; }
+    .vs-text { font-size: 2rem; }
+    .card-count { font-size: 1.6rem; }
+    #battle-area { gap: 30px; }
+}

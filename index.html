@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piedra · Papel · Tijera — Batalla de Cartas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ START SCREEN ============ -->
+<div id="start-screen">
+    <div class="start-content">
+        <h1>Piedra · Papel · Tijera</h1>
+        <p class="subtitle">¡Batalla de cartas!</p>
+        <ul class="rules">
+            <li>🖱️ Pasa el mouse sobre tus cartas para verlas en 3D</li>
+            <li>👆 Haz clic para lanzar la carta al centro</li>
+            <li>💥 ¡Las cartas se revelan juntas en el centro!</li>
+            <li>🏆 El ganador se lleva las dos cartas</li>
+            <li>💀 Pierde quien se quede sin cartas</li>
+        </ul>
+        <button id="start-btn">¡Comenzar!</button>
+    </div>
+</div>
+
+<!-- ============ GAME AREA ============ -->
+<div id="game-area" class="hidden">
+
+    <!-- Header / Scoreboard -->
+    <div id="header">
+        <div class="score-panel">
+            <span class="panel-label">ENEMIGO</span>
+            <span class="card-count" id="enemy-count">5</span>
+            <span class="panel-sublabel">cartas</span>
+        </div>
+
+        <div id="round-result"></div>
+
+        <div class="score-panel">
+            <span class="panel-label">TÚ</span>
+            <span class="card-count" id="player-count">5</span>
+            <span class="panel-sublabel">cartas</span>
+        </div>
+    </div>
+
+    <!-- Enemy hand -->
+    <div id="enemy-hand-area" class="hand-area"></div>
+
+    <!-- Battle zone -->
+    <div id="battle-area">
+        <div id="enemy-battle-slot" class="battle-slot">
+            <span class="slot-label">Enemigo</span>
+        </div>
+
+        <div id="vs-display">
+            <span class="vs-text">VS</span>
+        </div>
+
+        <div id="player-battle-slot" class="battle-slot">
+            <span class="slot-label">Tú</span>
+        </div>
+    </div>
+
+    <!-- Player hand -->
+    <div id="player-hand-area" class="hand-area"></div>
+
+    <!-- Status -->
+    <div id="status-bar">
+        <p id="status-msg">¡Elige una carta!</p>
+    </div>
+
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
