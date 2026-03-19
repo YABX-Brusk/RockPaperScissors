@@ -15,7 +15,7 @@ const FACE_IMGS = [
 ];
 
 // Card back image from HuntTheAce project
-const BACK_IMG = '../HuntTheAceJSGame-main/HuntTheAceJSGame-main/images/card-back-Blue.png';
+const BACK_IMG = 'images/card-back-Blue.png';
 
 // WINS[playerType][enemyType] = true → player wins, false → player loses, null → draw
 const WINS = [
