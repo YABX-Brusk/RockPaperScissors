@@ -186,8 +186,10 @@ function throwCard(cardEl, targetSlot, isEnemy, onLand) {
     const from   = cardEl.getBoundingClientRect();
     const target = targetSlot.getBoundingClientRect();
 
-    // Hide original card (it stays in the hand DOM)
-    cardEl.style.opacity = '0';
+    // Replace card with an empty slot placeholder in the hand
+    const placeholder = document.createElement('div');
+    placeholder.className = 'card-placeholder';
+    cardEl.parentNode.replaceChild(placeholder, cardEl);
 
     // Flying proxy — shows only the card back during flight
     const fly = document.createElement('div');

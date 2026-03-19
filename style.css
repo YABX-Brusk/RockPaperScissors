@@ -381,6 +381,18 @@ body {
 }
 
 /* ============================================================
+   EMPTY SLOT — left behind when a card is played
+   ============================================================ */
+.card-placeholder {
+    width: var(--card-w);
+    height: var(--card-h);
+    flex-shrink: 0;
+    border: 2px dashed rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius);
+    background: rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================================
    THROW ANIMATION (flying card overlay)
    ============================================================ */
 .flying-card {
