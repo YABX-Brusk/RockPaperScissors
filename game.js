@@ -60,11 +60,9 @@ $startBtn.addEventListener('click', () => {
     $startScreen.style.display = 'none';
     $gameArea.classList.remove('hidden');
 
-    // Generate starting hands
-    for (let i = 0; i < INITIAL_HAND; i++) {
-        playerHand.push(rndCard());
-        enemyHand.push(rndCard());
-    }
+    // Generate starting hands (always at least one Rock, Paper, Scissors)
+    playerHand = dealHand(INITIAL_HAND);
+    enemyHand  = dealHand(INITIAL_HAND);
 
     beginRound();
 });
@@ -379,12 +377,8 @@ function showGameOver(playerWon) {
         overlay.remove();
 
         // Reset state
-        playerHand = [];
-        enemyHand  = [];
-        for (let i = 0; i < INITIAL_HAND; i++) {
-            playerHand.push(rndCard());
-            enemyHand.push(rndCard());
-        }
+        playerHand = dealHand(INITIAL_HAND);
+        enemyHand  = dealHand(INITIAL_HAND);
 
         beginRound();
     });
@@ -396,6 +390,19 @@ function showGameOver(playerWon) {
 
 function rndCard() {
     return { type: Math.floor(Math.random() * 3) };
+}
+
+// Returns a hand of `size` cards guaranteed to have at least one
+// of each type (Rock, Paper, Scissors). Remaining slots are random.
+function dealHand(size) {
+    const hand = [{ type: 0 }, { type: 1 }, { type: 2 }];
+    for (let i = 3; i < size; i++) hand.push(rndCard());
+    // Fisher-Yates shuffle
+    for (let i = hand.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [hand[i], hand[j]] = [hand[j], hand[i]];
+    }
+    return hand;
 }
 
 function clearBattleSlots() {
